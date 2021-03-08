@@ -20,8 +20,8 @@
 int main(int argc, char* argv[]) {
   tuned_kernel(argc, argv, 
 		  [&](const int total_iters) {
-  Kokkos::View<float***, Kokkos::LayoutLeft, Kokkos::DefaultExecutionSpace::memory_space> left("left", total_iters, total_iters, total_iters);
-  Kokkos::View<float***, Kokkos::LayoutRight, Kokkos::DefaultExecutionSpace::memory_space> right("right", total_iters, total_iters, total_iters);
+  Kokkos::View<float***, Kokkos::LayoutLeft, Kokkos::DefaultExecutionSpace::memory_space> left("left", 100, 100, 100);
+  Kokkos::View<float***, Kokkos::LayoutRight, Kokkos::DefaultExecutionSpace::memory_space> right("right", 100, 100, 100);
                     return std::make_pair(left, right); 
 		  }, 
 		  [&](const int x, const int total_iters, auto data) {
