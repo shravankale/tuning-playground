@@ -16,6 +16,7 @@
 #include <cstdlib>
 #include <random>
 #include <tuple>
+#include <iostream>
 int main(int argc, char* argv[]) {
   tuned_kernel(argc, argv, 
 		  [&](const int total_iters) {
@@ -24,6 +25,7 @@ int main(int argc, char* argv[]) {
                     return std::make_pair(left, right); 
 		  }, 
 		  [&](const int x, const int total_iters, auto data) {
+              std::cout << "Testing\n";
               auto left = data.first;
 	      auto right = data.second;
 	      Kokkos::deep_copy(Kokkos::DefaultExecutionSpace{}, right, left); 
