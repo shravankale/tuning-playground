@@ -21,11 +21,10 @@ int main(int argc, char* argv[]) {
   tuned_kernel(argc, argv, 
 		  [&](const int total_iters) {
   Kokkos::View<float***, Kokkos::LayoutLeft, Kokkos::DefaultExecutionSpace::memory_space> left("left", total_iters, total_iters, total_iters);
-  Kokkos::View<float***, Kokkos::LayoutLeft, Kokkos::DefaultExecutionSpace::memory_space> right("right", total_iters, total_iters, total_iters);
+  Kokkos::View<float***, Kokkos::LayoutRight, Kokkos::DefaultExecutionSpace::memory_space> right("right", total_iters, total_iters, total_iters);
                     return std::make_pair(left, right); 
 		  }, 
 		  [&](const int x, const int total_iters, auto data) {
-              std::cout << "Testing\n";
               auto left = data.first;
 	      auto right = data.second;
 	      Kokkos::deep_copy(Kokkos::DefaultExecutionSpace{}, right, left); 
