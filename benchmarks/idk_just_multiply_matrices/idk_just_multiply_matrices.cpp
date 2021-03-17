@@ -1,14 +1,41 @@
-/****************************************************************************
- * Copyright (c) 2017-2021 by the ArborX authors                            *
- * All rights reserved.                                                     *
- *                                                                          *
- * This file is part of the ArborX library. ArborX is                       *
- * distributed under a BSD 3-clause license. For the licensing terms see    *
- * the LICENSE file in the top-level directory.                             *
- *                                                                          *
- * SPDX-License-Identifier: BSD-3-Clause                                    *
- ****************************************************************************/
-
+/**
+ * idk_just_multiply_matrices
+ *
+ * Complexity: high
+ *
+ * Tuning problem:
+ *
+ * This is a *nested* tuning problem, with some complexity in the
+ * inner tuning problems.
+ *
+ * This simulates a user who doesn't know Kokkos very well,
+ * telling Kokkos to decide whether to do a matmul using
+ * a TeamPolicy or an MDRangePolicy, they express no preference.
+ *
+ * If you pick an MDRangePolicy, that involves tuning a tile size,
+ * as referenced in the "deep_copy" benchmark.
+ *
+ * If you pick a TeamPolicy, that involves tuning a "team_size"
+ * and "vector_length," constructs that shape the amount of 
+ * parallelism in different levels of Kokkos.
+ *
+ * The "fastest_of" construct exposes a categorical choice among
+ * implementations. Note that the tuning interface doesn't really
+ * tell you that you're in a nested context, you'll just see
+ *
+ * begin_context(fastest_of_context_id)
+ * request_values(which_implementation_should_i_use)
+ * [suppose you say "TeamPolicy"]
+ * begin_context(team_policy_tuner_id)
+ * request_values(team_size, vector_length)
+ * end_context(team_policy_tuner_id)
+ * end_context(fastest_of_context_id)
+ *
+ * This is an extremely difficult problem
+ *
+ * Note that this currently involves no features.
+ *
+ */
 #include <tuning_playground.hpp>
 
 #include <chrono>

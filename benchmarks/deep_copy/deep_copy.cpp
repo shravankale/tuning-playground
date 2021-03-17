@@ -1,14 +1,23 @@
-/****************************************************************************
- * Copyright (c) 2017-2021 by the ArborX authors                            *
- * All rights reserved.                                                     *
- *                                                                          *
- * This file is part of the ArborX library. ArborX is                       *
- * distributed under a BSD 3-clause license. For the licensing terms see    *
- * the LICENSE file in the top-level directory.                             *
- *                                                                          *
- * SPDX-License-Identifier: BSD-3-Clause                                    *
- ****************************************************************************/
-
+/**
+ * Deep Copy
+ *
+ * Complexity: simple
+ * Tuning problem:
+ *
+ * Kokkos transforms data layouts of View depending on the architecture.
+ *
+ * That is, in a 3D view, we change which dimension is stride 1 access.
+ * This means that in some cases, we need to transpose data if it's
+ * operated on in multiple ExecutionSpaces
+ *
+ * It does so using an "MDRangePolicy," a set of tightly nested loops.
+ *
+ * These "MDRangePolicy's" have tile sizes, which you're picking.
+ * Currently no features, but plans are to vary the size of these Views
+ * to enable you to see whether optimal tile sizes vary with View shapes
+ *
+ * This is basically a smoke-test, can your tool tune tile sizes
+ */
 #include <tuning_playground.hpp>
 
 #include <chrono>
