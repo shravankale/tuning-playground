@@ -3,6 +3,41 @@
 
 #include<Kokkos_Core.hpp>
 #include<unordered_map>
+
+namespace Impl {
+
+struct empty {};
+
+template <typename Tunable, template <typename...> typename TupleLike,
+          typename... Components, size_t... Indices>
+void invoke_benchmark_helper(const Tunable &tunable, int num_iters,
+                             const TupleLike<Components...> &tup,
+                             const std::index_sequence<Indices...>) {
+  for (int x = 0; x < num_iters; ++x) {
+    tunable(x, num_iters, std::get<Indices>(tup)...);
+  }
+}
+
+template <typename Tunable, template <typename...> typename TupleLike,
+          typename... Components>
+void invoke_benchmark(const Tunable &tunable, int num_iters,
+                      const TupleLike<Components...> &tup) {
+  invoke_benchmark_helper(tunable, num_iters, tup,
+                          std::make_index_sequence<sizeof...(Components)>{});
+}
+
+template <typename Setup>
+auto setup_helper(const Setup &setup, int num_iters, std::false_type) {
+  return setup(num_iters);
+}
+template <typename Setup>
+auto setup_helper(const Setup &setup, int num_iters, std::true_type) {
+  setup(num_iters);
+  return std::make_tuple();
+}
+
+} // namespace Impl
+
 template<typename Setup, typename Tunable>
 void tuned_kernel(int argc, char* argv[], Setup setup, Tunable tunable){
   int num_iters = 100000;
@@ -11,11 +46,10 @@ void tuned_kernel(int argc, char* argv[], Setup setup, Tunable tunable){
   bool print_progress;
   Kokkos::initialize(argc, argv);
   {
-    auto kernel_data = setup(num_iters);
-    for(int x =0; x < num_iters; ++x) {
-      tunable(x, num_iters, kernel_data);
-    } 
-  
+    using emptiness =
+        typename std::is_same<decltype(setup(num_iters)), void>::type;
+    auto kernel_data = Impl::setup_helper(setup, num_iters, emptiness{});
+    Impl::invoke_benchmark(tunable, num_iters, kernel_data);
   }
   Kokkos::finalize();
 }

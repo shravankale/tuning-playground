@@ -46,22 +46,19 @@
 #include <tuple>
 int main(int argc, char *argv[]) {
   constexpr const int data_size = 1000;
+  using view_type =
+      Kokkos::View<float **, Kokkos::DefaultExecutionSpace::memory_space>;
+
   tuned_kernel(
       argc, argv,
       [&](const int total_iters) {
-        Kokkos::View<float **, Kokkos::DefaultExecutionSpace::memory_space>
-            left("left_inp", data_size, data_size);
-        Kokkos::View<float **, Kokkos::DefaultExecutionSpace::memory_space>
-            right("right_inp", data_size, data_size);
-        Kokkos::View<float **, Kokkos::DefaultExecutionSpace::memory_space>
-            output("output", data_size, data_size);
+        view_type left("left_inp", data_size, data_size);
+        view_type right("right_inp", data_size, data_size);
+        view_type output("output", data_size, data_size);
         return std::make_tuple(left, right, output);
       },
-      [&](const int x, const int total_iters, auto data) {
-        auto left = std::get<0>(data);
-        auto right = std::get<1>(data);
-        auto output = std::get<2>(data);
-
+      [&](const int x, const int total_iters, view_type left, view_type right,
+          view_type output) {
         fastest_of(
             "bad_gemms",
             [&]() {
