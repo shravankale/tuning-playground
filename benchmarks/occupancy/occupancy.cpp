@@ -1,37 +1,21 @@
 /**
- * idk_just_multiply_matrices
+ * occupancy
  *
- * Complexity: high
+ * Complexity: low
+ *
+ * Requires: GPU architecture (tested with cuda)
  *
  * Tuning problem:
  *
- * This is a *nested* tuning problem, with some complexity in the
- * inner tuning problems.
+ * Kokkos has a "DesiredOccupancy" struct with which users can
+ * determine what occupancy is needed. I added this test as it
+ * is one of the simplest tests I can imagine, you're tuning a
+ * number between 1 and 100. On a V100, at time of writing we
+ * tend to see numbers in the 35-45 range be optimal.
  *
- * This simulates a user who doesn't know Kokkos very well,
- * telling Kokkos to decide whether to do a matmul using
- * a TeamPolicy or an MDRangePolicy, they express no preference.
- *
- * If you pick an MDRangePolicy, that involves tuning a tile size,
- * as referenced in the "deep_copy" benchmark.
- *
- * If you pick a TeamPolicy, that involves tuning a "team_size"
- * and "vector_length," constructs that shape the amount of
- * parallelism in different levels of Kokkos.
- *
- * The "fastest_of" construct exposes a categorical choice among
- * implementations. Note that the tuning interface doesn't really
- * tell you that you're in a nested context, you'll just see
- *
- * begin_context(fastest_of_context_id)
- * request_values(which_implementation_should_i_use)
- * [suppose you say "TeamPolicy"]
- * begin_context(team_policy_tuner_id)
- * request_values(team_size, vector_length)
- * end_context(team_policy_tuner_id)
- * end_context(fastest_of_context_id)
- *
- * This is an extremely difficult problem
+ * This is also used on the Kokkos side to verify that
+ * RangePolicy Occupancy tuners (the source of these)
+ * are effective
  *
  * Note that this currently involves no features.
  *
