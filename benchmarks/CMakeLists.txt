@@ -1,3 +1,3 @@
 add_subdirectory(deep_copy)
 add_subdirectory(idk_just_multiply_matrices)
-#add_subdirectory(matmul)
+add_subdirectory(occupancy)
