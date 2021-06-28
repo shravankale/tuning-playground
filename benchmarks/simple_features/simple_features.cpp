@@ -1,21 +1,19 @@
 /**
- * simple_mdrange
+ * simple_features
  *
- * Complexity: medium
- *
- * Requires: GPU architecture (tested with cuda)
+ * Complexity: simple
  *
  * Tuning problem:
  *
- * Kokkos has an "MDRangePolicy" to model tightly nested loops,
- * a lot of tuning problems are about tuning the tile sizes in
- * that construct
+ * This example exists for two reasons. First: to show what a simple 
+ * direct usage of the Tuning API looks like, and second, to provide
+ * tools with an example of a simple problem with features.
  *
- * The primary use case of this is to validate that tuning MDRanges
- * is feasible. For tuning folks it has the benefit of being
- * *hugely* multidimensional
- *
- * Note that this currently involves no features.
+ * In this contrived example, you're asked to guess the cuteness of an
+ * entity, along with what species it is. From 0, cuteness goes to 11.
+ * Values 0-9 are reserved for species "person," while 10 and 11 are for
+ * "dog." You're asked to return basically the same answer as you were given,
+ * and penalized for a miss on cuteness or species.
  *
  */
 #include <tuning_playground.hpp>
