@@ -113,12 +113,14 @@ int main(int argc, char *argv[]) {
         Kokkos::Tools::Experimental::request_output_values(
             context, 2, answer_vector.data());
         auto penalty =
-            (1000 * std::abs(cuteness - answer_vector[0].value.int_value)) +
-            100 * ((strcmp(name.c_str(),
-                           answer_vector[1].value.string_value)) == 0
-                       ? 0
-                       : 1);
-        usleep(1 * penalty);
+            1 * (1000 * std::abs(cuteness - answer_vector[0].value.int_value)) +
+            1000 * ((strcmp(name.c_str(),
+                            answer_vector[1].value.string_value) == 0)
+                        ? 0
+                        : 1);
+        // std::cout << "Iter: "<<x<<": "<<name.c_str() << ":
+        // "<<answer_vector[1].value.string_value <<": "<<penalty<<std::endl;
+        usleep(10 * penalty);
         Kokkos::Tools::Experimental::end_context(context);
       });
 }
