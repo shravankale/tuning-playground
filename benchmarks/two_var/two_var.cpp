@@ -1,19 +1,16 @@
 /**
- * simple_features
+ * two_var
  *
- * Complexity: simple
+ * Complexity: medium
  *
  * Tuning problem:
  *
- * This example exists for two reasons. First: to show what a simple
- * direct usage of the Tuning API looks like, and second, to provide
- * tools with an example of a simple problem with features.
+ * This is a two-valued tuning problem, in which you need
+ * both parameters to learn the answer. There are two
+ * values between 0 and 11 (inclusive).
  *
- * In this contrived example, you're asked to guess the cuteness of an
- * entity, along with what species it is. From 0, cuteness goes to 11.
- * Values 0-9 are reserved for species "person," while 10 and 11 are for
- * "dog." You're asked to return basically the same answer as you were given,
- * and penalized for a miss on cuteness or species.
+ * The penalty function here is just the distance between
+ * your answer and the provided value.
  *
  */
 #include <tuning_playground.hpp>
@@ -25,7 +22,7 @@
 #include <random>
 #include <tuple>
 #include <unistd.h>
-auto make_cuteness_candidates() {
+auto make_value_candidates() {
   std::vector<int64_t> candidates{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
   int64_t *bad_candidate_impl =
       (int64_t *)malloc(sizeof(int64_t) * candidates.size());
@@ -41,68 +38,66 @@ int main(int argc, char *argv[]) {
       argc, argv,
       [&](const int total_iters) {
         srand(time(NULL));
-        size_t cuteness_percent_id;
-        size_t is_dog_id;
-        size_t c_answer_id;
-        size_t s_answer_id;
-        Kokkos::Tools::Experimental::VariableInfo cuteness_info;
-        cuteness_info.type =
+        size_t x_value_id;
+        size_t y_value_id;
+        size_t x_answer_id;
+        size_t y_answer_id;
+        Kokkos::Tools::Experimental::VariableInfo x_value_info;
+        x_value_info.type =
             Kokkos::Tools::Experimental::ValueType::kokkos_value_int64;
-        cuteness_info.category = Kokkos::Tools::Experimental::
+        x_value_info.category = Kokkos::Tools::Experimental::
             StatisticalCategory::kokkos_value_ratio;
-        cuteness_info.valueQuantity =
+        x_value_info.valueQuantity =
             Kokkos::Tools::Experimental::CandidateValueType::kokkos_value_range;
-        cuteness_info.candidates = make_cuteness_candidates();
-        Kokkos::Tools::Experimental::VariableInfo is_dog_info;
-        is_dog_info.type =
+        x_value_info.candidates = make_value_candidates();
+        Kokkos::Tools::Experimental::VariableInfo y_value_info;
+        y_value_info.type =
             Kokkos::Tools::Experimental::ValueType::kokkos_value_int64;
-        is_dog_info.category = Kokkos::Tools::Experimental::
+        y_value_info.category = Kokkos::Tools::Experimental::
             StatisticalCategory::kokkos_value_ratio;
-        is_dog_info.valueQuantity =
+        y_value_info.valueQuantity =
             Kokkos::Tools::Experimental::CandidateValueType::kokkos_value_set;
-        is_dog_info.candidates = make_cuteness_candidates();
-        Kokkos::Tools::Experimental::VariableInfo c_answer_info;
-        c_answer_info.type =
+        y_value_info.candidates = make_value_candidates();
+        Kokkos::Tools::Experimental::VariableInfo x_answer_info;
+        x_answer_info.type =
             Kokkos::Tools::Experimental::ValueType::kokkos_value_int64;
-        c_answer_info.category = Kokkos::Tools::Experimental::
+        x_answer_info.category = Kokkos::Tools::Experimental::
             StatisticalCategory::kokkos_value_ratio;
-        c_answer_info.valueQuantity =
+        x_answer_info.valueQuantity =
             Kokkos::Tools::Experimental::CandidateValueType::kokkos_value_set;
-        c_answer_info.candidates = make_cuteness_candidates();
+        x_answer_info.candidates = make_value_candidates();
 
-        Kokkos::Tools::Experimental::VariableInfo s_answer_info;
-        s_answer_info.type =
+        Kokkos::Tools::Experimental::VariableInfo y_answer_info;
+        y_answer_info.type =
             Kokkos::Tools::Experimental::ValueType::kokkos_value_int64;
-        s_answer_info.category = Kokkos::Tools::Experimental::
+        y_answer_info.category = Kokkos::Tools::Experimental::
             StatisticalCategory::kokkos_value_categorical;
-        s_answer_info.valueQuantity =
+        y_answer_info.valueQuantity =
             Kokkos::Tools::Experimental::CandidateValueType::kokkos_value_set;
-        s_answer_info.candidates = make_cuteness_candidates();
-        cuteness_percent_id = Kokkos::Tools::Experimental::declare_input_type(
-            "tuning_playground.cuteness", cuteness_info);
-        is_dog_id = Kokkos::Tools::Experimental::declare_input_type(
-            "tuning_playground.is_dog", is_dog_info);
-        c_answer_id = Kokkos::Tools::Experimental::declare_output_type(
-            "tuning_playground.c_answer", c_answer_info);
-        s_answer_id = Kokkos::Tools::Experimental::declare_output_type(
-            "tuning_playground.s_answer", s_answer_info);
+        y_answer_info.candidates = make_value_candidates();
+        x_value_id = Kokkos::Tools::Experimental::declare_input_type(
+            "tuning_playground.x_value", x_value_info);
+        y_value_id = Kokkos::Tools::Experimental::declare_input_type(
+            "tuning_playground.y_value", y_value_info);
+        x_answer_id = Kokkos::Tools::Experimental::declare_output_type(
+            "tuning_playground.x_answer", x_answer_info);
+        y_answer_id = Kokkos::Tools::Experimental::declare_output_type(
+            "tuning_playground.y_answer", y_answer_info);
 
-        return std::make_tuple(cuteness_percent_id, is_dog_id, c_answer_id,
-                               s_answer_id);
+        return std::make_tuple(x_value_id, y_value_id, x_answer_id,
+                               y_answer_id);
       },
-      [&](const int x, const int total_iters, size_t cuteness_id,
-          size_t is_dog_id, size_t c_answer_id, size_t s_answer_id) {
-        int64_t cuteness = rand() % 12;
-        int64_t cuteness_y = rand() % 12;
+      [&](const int iter, const int total_iters, size_t x_value_id,
+          size_t y_value_id, size_t x_answer_id, size_t y_answer_id) {
+        int64_t x = rand() % 12;
+        int64_t y = rand() % 12;
         std::vector<Kokkos::Tools::Experimental::VariableValue> feature_vector{
-            Kokkos::Tools::Experimental::make_variable_value(cuteness_id,
-                                                             cuteness),
-            Kokkos::Tools::Experimental::make_variable_value(is_dog_id,
-                                                             cuteness_y)};
+            Kokkos::Tools::Experimental::make_variable_value(x_value_id, x),
+            Kokkos::Tools::Experimental::make_variable_value(y_value_id, y)};
         std::vector<Kokkos::Tools::Experimental::VariableValue> answer_vector{
-            Kokkos::Tools::Experimental::make_variable_value(c_answer_id,
+            Kokkos::Tools::Experimental::make_variable_value(x_answer_id,
                                                              int64_t(0)),
-            Kokkos::Tools::Experimental::make_variable_value(s_answer_id,
+            Kokkos::Tools::Experimental::make_variable_value(y_answer_id,
                                                              int64_t(0))};
         size_t context = Kokkos::Tools::Experimental::get_new_context_id();
         Kokkos::Tools::Experimental::begin_context(context);
@@ -110,14 +105,8 @@ int main(int argc, char *argv[]) {
                                                       feature_vector.data());
         Kokkos::Tools::Experimental::request_output_values(
             context, 2, answer_vector.data());
-        int64_t target = cuteness * cuteness + cuteness_y;
-        int64_t guess = answer_vector[0].value.int_value *
-                            answer_vector[0].value.int_value +
-                        answer_vector[1].value.int_value;
-        auto penalty = std::abs(target - guess);
-        // std::cout << "Iter: "<<x<<": "<<name.c_str() << ":
-        // "<<answer_vector[1].value.string_value <<": "<<penalty<<std::endl;
-        // std::cout << target  <<"," << guess << "," << penalty<<std::endl;
+        auto penalty = std::abs(answer_vector[0].value.int_value - x) +
+                       std::abs(answer_vector[1].value.int_value - y);
         usleep(10 * penalty);
         Kokkos::Tools::Experimental::end_context(context);
       });
