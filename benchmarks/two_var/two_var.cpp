@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
         x_value_info.category = Kokkos::Tools::Experimental::
             StatisticalCategory::kokkos_value_ratio;
         x_value_info.valueQuantity =
-            Kokkos::Tools::Experimental::CandidateValueType::kokkos_value_range;
+            Kokkos::Tools::Experimental::CandidateValueType::kokkos_value_set;
         x_value_info.candidates = make_value_candidates();
         Kokkos::Tools::Experimental::VariableInfo y_value_info;
         y_value_info.type =
