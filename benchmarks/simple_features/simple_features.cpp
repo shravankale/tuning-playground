@@ -25,6 +25,9 @@
 #include <random>
 #include <tuple>
 #include <unistd.h>
+auto make_cuteness_candidates_range() {
+  return Kokkos::Tools::Experimental::make_candidate_range((int64_t)0, 12, 0, false, true);
+}
 auto make_cuteness_candidates() {
   std::vector<int64_t> candidates{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
   int64_t *bad_candidate_impl =
@@ -51,7 +54,7 @@ int main(int argc, char *argv[]) {
             StatisticalCategory::kokkos_value_ratio;
         cuteness_info.valueQuantity =
             Kokkos::Tools::Experimental::CandidateValueType::kokkos_value_range;
-        cuteness_info.candidates = make_cuteness_candidates();
+        cuteness_info.candidates = make_cuteness_candidates_range();
         Kokkos::Tools::Experimental::VariableInfo is_dog_info;
         is_dog_info.type =
             Kokkos::Tools::Experimental::ValueType::kokkos_value_string;
