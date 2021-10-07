@@ -1,6 +1,6 @@
 add_subdirectory(deep_copy)
 add_subdirectory(idk_just_multiply_matrices)
 add_subdirectory(simple_mdrange)
-#add_subdirectory(simple_features)
+add_subdirectory(simple_features)
 add_subdirectory(two_var)
 #add_subdirectory(occupancy)
