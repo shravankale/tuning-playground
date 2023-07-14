@@ -1,4 +1,15 @@
 
+/*
+    'tuning_playground' plugin for tuning number of openmp threads, schedule, and tilesizes in a matrix-multiplcation kerenel
+
+    Values for the above varaibles:
+    1. openmp_threads(varaible) = The nproc varaible defines the maxiumum amount of threads. Modify according to hardware
+    2. schedule (fixed) = Kokkos provides support only for dynamic and static scheduling
+    3. tilesizes (fixed) = Factors of matrix dimension size.
+
+    Dimensions of matrices: M,N,P
+*/
+
 #include <tuning_playground.hpp>
 #include <omp.h>
 
@@ -124,7 +135,7 @@ void doParallelNew(
     );
     
     
-    
+    /*
     //Another way to use teamthreadmdrange - Tiles are threaded seperately
     //Problem: Any tile_size value of 1 leads to an std::invalid_argument
     //Deduction: Removing tile_size 1 as an option leads to successful program execution
@@ -160,7 +171,7 @@ void doParallelNew(
             });   
         }
     );
-    
+    */
     
    
 

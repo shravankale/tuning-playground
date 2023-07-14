@@ -1,4 +1,13 @@
 
+/*
+    'tuning_playground' plugin for tuning the schedule for a matrix-multiplcation kerenel
+
+    Values for the above varaibles:
+    1. schedule (fixed) = Kokkos provides support only for dynamic and static scheduling
+
+    Dimensions of matrices: M,N,P
+*/
+
 #include <tuning_playground.hpp>
 #include <omp.h>
 

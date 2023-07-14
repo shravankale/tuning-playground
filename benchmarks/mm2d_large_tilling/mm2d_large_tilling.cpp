@@ -1,4 +1,13 @@
 
+/*
+    'tuning_playground' plugin for tuning tilesizes in a matrix-multiplcation kerenel
+
+    Values for the above varaibles:
+    1. tilesizes (fixed) = Factors of matrix dimension size.
+
+    Dimensions of matrices: M,N,P
+*/
+
 #include <tuning_playground.hpp>
 #include <omp.h>
 

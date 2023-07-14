@@ -1,4 +1,13 @@
 
+/*
+    'tuning_playground' plugin for tuning number of openmp threads in a matrix-multiplcation kerenel
+
+    Values for the above varaibles:
+    1. openmp_threads(varaible) = The nproc varaible defines the maxiumum amount of threads. Modify according to hardware
+  
+    Dimensions of matrices: M,N,P
+*/
+
 #include <tuning_playground.hpp>
 #include <omp.h>
 
