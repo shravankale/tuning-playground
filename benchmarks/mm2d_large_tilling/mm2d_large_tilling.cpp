@@ -89,6 +89,7 @@ int main(int argc, char *argv[]){
             std::vector<int64_t> candidates_tj = factorsOf(N);
             std::vector<int64_t> candidates_tk = factorsOf(P);
 
+            /*
             std::cout<<"Tiling options for M="<<M<<std::endl;
             for(auto &i : candidates_ti){ std::cout<<i<<", "; }
             std::cout<<std::endl;
@@ -100,6 +101,7 @@ int main(int argc, char *argv[]){
             std::cout<<"Tiling options for P="<<P<<std::endl;
             for(auto &i : candidates_tk){ std::cout<<i<<", "; }
             std::cout<<std::endl;
+            */
 
             //Input variables - ti,tj,tk
             ////Kokkos::Tools::Experimental::VariableInfo ti_inp_info, tj_inp_info, tk_inp_info;

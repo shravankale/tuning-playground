@@ -120,7 +120,7 @@ int main(int argc, char *argv[]){
             //omp_set_dynamic?
             int set_num_threads = answer_vector[0].value.int_value;
             //std::cout<<"Set OMP Num Threads: "<<set_num_threads<<std::endl;
-            printf("Set OMP Num Threads: %d\n",set_num_threads);
+            //printf("Set OMP Num Threads: %d\n",set_num_threads);
 
             //Attempting to set num threads by using hiearchial parallelism
 
@@ -170,7 +170,7 @@ int main(int argc, char *argv[]){
             /*Kokkos::fence();
             double time_elapsed = timer.seconds();
             cout<<"Execution Time: "<<time_elapsed*1e6<<" microseconds"<<endl;*/
-            printf("End Tuning Context");
+            //printf("End Tuning Context");
             Kokkos::Tools::Experimental::end_context(context);
         } 
     );

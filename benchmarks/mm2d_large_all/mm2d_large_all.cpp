@@ -114,12 +114,12 @@ void doParallelNew(
 
             auto teamThreadRange = Kokkos::TeamThreadRange(team,1);
 
-            printf("fTeam_size: %d \n",team.team_size());
+            //printf("fTeam_size: %d \n",team.team_size());
 
             Kokkos::parallel_for(teamThreadRange, KOKKOS_LAMBDA(int a){
 
-                std::cout<<"team_rank: "<<team.team_rank()<<std::endl;
-                printf("fTeam_rank: %d \n",team.team_rank());
+                //std::cout<<"team_rank: "<<team.team_rank()<<std::endl;
+                //printf("fTeam_rank: %d \n",team.team_rank());
 
                 Kokkos::MDRangePolicy<executionType,Kokkos::Rank<3>> policy_ijk({0,0,0},{M,N,P},{ti,tj,tk});
                 Kokkos::parallel_for("loop_tiling", policy_ijk, KOKKOS_LAMBDA(int i, int j, int k){
@@ -237,7 +237,7 @@ int main(int argc, char *argv[]){
 
             //Output Variables - tilling
             std::vector<int64_t> candidates_ti=factorsOf(M), candidates_tj=factorsOf(N), candidates_tk=factorsOf(P);
-            printFactors(candidates_ti, 'M',M); printFactors(candidates_tj, 'N',N); printFactors(candidates_tk, 'P',P);
+            //printFactors(candidates_ti, 'M',M); printFactors(candidates_tj, 'N',N); printFactors(candidates_tk, 'P',P);
 
             Kokkos::Tools::Experimental::VariableInfo ti_out_info, tj_out_info, tk_out_info;
             ti_out_info.type = Kokkos::Tools::Experimental::ValueType::kokkos_value_int64;
@@ -296,20 +296,20 @@ int main(int argc, char *argv[]){
             int tj = answer_vector[3].value.int_value;
             int tk = answer_vector[4].value.int_value;
 
-            std::cout<<"scheduleType: "<<scheduleType<<std::endl;
-            std::cout<<"set_num_threads: "<<set_num_threads<<std::endl;
-            std::cout<<"ti: "<<ti<<std::endl;
-            std::cout<<"tj: "<<tj<<std::endl;
-            std::cout<<"tk: "<<tk<<std::endl;
+            //<<"scheduleType: "<<scheduleType<<std::endl;
+            //std::cout<<"set_num_threads: "<<set_num_threads<<std::endl;
+            //std::cout<<"ti: "<<ti<<std::endl;
+            //std::cout<<"tj: "<<tj<<std::endl;
+            //std::cout<<"tk: "<<tk<<std::endl;
                        
             
             int res = scheduleType.compare("static_schedule");
             if(res==0){
-                std::cout<<"Doing STATIC"<<std::endl;
+                //std::cout<<"Doing STATIC"<<std::endl;
                 doParallelNew<Kokkos::OpenMP,Kokkos::Schedule<Kokkos::Static>>(re,ar1,ar2,set_num_threads, ti, tj, tk);
             }
             else{
-                std::cout<<"Doing DYNAMIC"<<std::endl;
+                //std::cout<<"Doing DYNAMIC"<<std::endl;
                 doParallelNew<Kokkos::OpenMP,Kokkos::Schedule<Kokkos::Dynamic>>(re,ar1,ar2,set_num_threads, ti, tj, tk);
             }
             /*
