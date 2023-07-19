@@ -1,10 +1,10 @@
 
 ## OpenMP Benchmarks: Tuning OpenMP examples with Apex Tuner
 
-The *examples* directory consists of sub-directories for individual OpenMP benchmarks. 
+The *examples* directory consists of sub-directories for individual OpenMP benchmarks.
 
 Each of the sub-directories consists of the following files:
-1. *example name*_*tuning variable*.sh (Run Script)
+1. tune_*kernel name*_*tuning variable*.sh (Run Script)
     - Consists of hardcoded paths for the apex executable and openmp example executable that need to be changed accordingly
 
 2. *sourceme.sh*
