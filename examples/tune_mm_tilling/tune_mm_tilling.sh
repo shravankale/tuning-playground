@@ -13,4 +13,4 @@ set -x
 #Run
 /home/users/shravank/prjects/KokkosXApex_updated/install/apex/bin/apex_exec --apex:csv --apex:kokkos --apex:kokkos_tuning --apex:kokkos_fence --apex:scatter --apex:postprocess \
 --apex:ompt --apex:ompt_details \
-/home/users/shravank/prjects/KokkosXApex_updated/install/tuning-playground/bin/mm2d_large_all.exe 
+/home/users/shravank/prjects/KokkosXApex_updated/install/tuning-playground/bin/tune_mm_tilling.exe 
