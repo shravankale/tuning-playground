@@ -40,7 +40,7 @@ auto setup_helper(const Setup &setup, int num_iters, std::true_type) {
 
 template<typename Setup, typename Tunable>
 void tuned_kernel(int argc, char* argv[], Setup setup, Tunable tunable){
-  int num_iters = 100000;
+  int num_iters = 1000;
   bool tuned_internals;
   bool found_tuning_tool;
   bool print_progress;
