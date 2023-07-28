@@ -22,8 +22,8 @@
 #include <random>
 #include <unistd.h>
 
-const int M=16;
-const int N=16;
+const int M=64;
+const int N=64;
 
 template <typename T>
 void doParallel(){
@@ -47,7 +47,7 @@ void doParallel(){
             );*/
             //j=i, j<N (M=64,N=64,usleep=1000)
             for(int j=i; j<N; j++){
-                usleep(2*1e6);
+                usleep(1000);
                 
             }
         });

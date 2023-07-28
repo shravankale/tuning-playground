@@ -81,7 +81,7 @@ void doParallelNew(
     int league_size = 1;
     int team_size = set_num_threads;
 
-    Kokkos::TeamPolicy<executionType, scheduleType> policy(league_size, team_size);
+    Kokkos::TeamPolicy<executionType> policy(league_size, team_size);
 
     /*
     //Problems: 
@@ -121,7 +121,7 @@ void doParallelNew(
                 //std::cout<<"team_rank: "<<team.team_rank()<<std::endl;
                 //printf("fTeam_rank: %d \n",team.team_rank());
 
-                Kokkos::MDRangePolicy<executionType,Kokkos::Rank<3>> policy_ijk({0,0,0},{M,N,P},{ti,tj,tk});
+                Kokkos::MDRangePolicy<executionType,scheduleType,Kokkos::Rank<3>> policy_ijk({0,0,0},{M,N,P},{ti,tj,tk});
                 Kokkos::parallel_for("loop_tiling", policy_ijk, KOKKOS_LAMBDA(int i, int j, int k){
                     re(i,k) += ar1(i,j) * ar2(j,k);
                 });
